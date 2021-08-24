@@ -78,7 +78,3 @@ func (ad *Adapter) GetDivision(ctx context.Context, req *pb.OperationParameters)
 	}
 	return ans, nil
 }
-
-func (ad *Adapter) mustEmbedUnimplementedArithmeticServiceServer() {
-	panic("implement me")
-}

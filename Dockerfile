@@ -1,9 +1,9 @@
-FROM golang:1.16-alpine
+FROM golang:1.15.3-alpine3.12
 
 EXPOSE 9000
 
 RUN apk update \
-    && apk add --no-cache \
+  && apk add --no-cache \
     mysql-client \
     build-base
 

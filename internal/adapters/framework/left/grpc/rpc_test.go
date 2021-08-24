@@ -3,11 +3,10 @@ package grpc
 import (
 	"context"
 	"github.com/stretchr/testify/require"
-	"github.com/sunil206b/hex-arc-app/internal/adapters/app/api"
-	"github.com/sunil206b/hex-arc-app/internal/adapters/core/arithmetic"
 	"github.com/sunil206b/hex-arc-app/internal/adapters/framework/left/grpc/pb"
 	"github.com/sunil206b/hex-arc-app/internal/adapters/framework/right/db"
-	"github.com/sunil206b/hex-arc-app/internal/ports"
+	"github.com/sunil206b/hex-arc-app/internal/application/api"
+	"github.com/sunil206b/hex-arc-app/internal/application/core/arithmetic"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
 	"log"
@@ -25,20 +24,14 @@ func init() {
 	lis = bufconn.Listen(bufSize)
 	grpcServer := grpc.NewServer()
 
-	//Ports
-	var core ports.ArithmeticPort
-	var dbAdapter ports.DBPort
-	var appAdapter ports.APIPort
-	var gRPCAdapter ports.GRPCPort
-
 	dbDriver := os.Getenv("DB_DRIVER")
 	dsName := os.Getenv("DB_NAME")
-	dbAdapter = db.NewAdapter(dbDriver, dsName)
+	dbAdapter := db.NewAdapter(dbDriver, dsName)
 
-	core = arithmetic.NewAdapter()
-	appAdapter = api.NewAdapter(dbAdapter, core)
+	core := arithmetic.New()
+	appAdapter := api.NewApplication(dbAdapter, core)
 
-	gRPCAdapter = NewAdapter(appAdapter)
+	gRPCAdapter := NewAdapter(appAdapter)
 	pb.RegisterArithmeticServiceServer(grpcServer, gRPCAdapter)
 	go func() {
 		if err = grpcServer.Serve(lis); err != nil {

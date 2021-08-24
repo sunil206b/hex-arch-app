@@ -2,19 +2,19 @@ package api
 
 import "github.com/sunil206b/hex-arc-app/internal/ports"
 
-type Adapter struct {
+type Application struct {
 	db    ports.DBPort
-	arith ports.ArithmeticPort
+	arith Arithmetic
 }
 
-func NewAdapter(db ports.DBPort, arith ports.ArithmeticPort) *Adapter {
-	return &Adapter{
+func NewApplication(db ports.DBPort, arith Arithmetic) *Application {
+	return &Application{
 		db:    db,
 		arith: arith,
 	}
 }
 
-func (ad *Adapter) GetAddition(a, b int32) (int32, error) {
+func (ad *Application) GetAddition(a, b int32) (int32, error) {
 	ans, err := ad.arith.Addition(a, b)
 	if err != nil {
 		return 0, err
@@ -25,7 +25,7 @@ func (ad *Adapter) GetAddition(a, b int32) (int32, error) {
 	}
 	return ans, nil
 }
-func (ad *Adapter) GetSubtraction(a, b int32) (int32, error) {
+func (ad *Application) GetSubtraction(a, b int32) (int32, error) {
 	ans, err := ad.arith.Subtraction(a, b)
 	if err != nil {
 		return 0, err
@@ -36,7 +36,7 @@ func (ad *Adapter) GetSubtraction(a, b int32) (int32, error) {
 	}
 	return ans, nil
 }
-func (ad *Adapter) GetMultiplication(a, b int32) (int32, error) {
+func (ad *Application) GetMultiplication(a, b int32) (int32, error) {
 	ans, err := ad.arith.Multiplication(a, b)
 	if err != nil {
 		return 0, err
@@ -48,7 +48,7 @@ func (ad *Adapter) GetMultiplication(a, b int32) (int32, error) {
 
 	return ans, nil
 }
-func (ad *Adapter) GetDivision(a, b int32) (int32, error) {
+func (ad *Application) GetDivision(a, b int32) (int32, error) {
 	ans, err := ad.arith.Division(a, b)
 	if err != nil {
 		return 0, err
